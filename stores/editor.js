@@ -14,7 +14,9 @@ function writer (state, emitter) {
     emitter.emit('render')
   })
 
-  emitter.on('key', function (code, capitalize) {
+  emitter.on('key', function (character) {
+    const { code, capitalize } = character
+
     if (code === 32) {
       for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
         word = state.words[i].text
@@ -39,11 +41,16 @@ function writer (state, emitter) {
     let key = state.keys[code]
     if (!key) key = state.keys[code] = code
 
-    let letter = String.fromCharCode(key)
+    let letter = String.fromCharCode(key).toLowerCase()
+    if (capitalize)
     if (!capitalize) letter = letter.toLowerCase()
 
     if (!state.words.length) {
-      state.words.push({ text: '', loading: false, error: null })
+      state.words.push({
+        text: '',
+        loading: false,
+        error: null,
+        capitalized: [] })
     }
 
     for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
@@ -53,6 +60,7 @@ function writer (state, emitter) {
           word.text = word.text.slice(0, state.index) + letter + word.text.slice(state.index)
         } else {
           word.text += letter
+          word.capitalized.push(capitalize)
         }
         state.index += 1
         emitter.emit('render')
