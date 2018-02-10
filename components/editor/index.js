@@ -3,19 +3,12 @@ const raw = require('choo/html/raw')
 const Nanocomponent = require('nanocomponent')
 const css = require('sheetify')
 const marker = require('../marker')
+const word = require('../word')
 
 const editorPrefix = css`
   :host:focus {
     caret-color: transparent;
     outline: none;
-  }
-`
-
-const wordPrefix = css`
-  :host {
-    display: inline-block;
-    padding: 0 .05em .1em;
-    line-height: 1;
   }
 `
 
@@ -38,15 +31,15 @@ module.exports = class Editor extends Nanocomponent {
 
       if (char + text.length === state.index) {
         marked = true
-        content.push(word(text, state.words[i]), marker())
+        content.push(word(text, state.words[i].error), marker())
       } else {
         if (char + text.length > state.index && !marked) {
           marked = true
           const index = state.index - char
           const parts = [text.substr(0, index), marker(), text.substr(index)]
-          content.push(word(parts, state.words[i]))
+          content.push(word(parts, state.words[i].error))
         } else {
-          content.push(word(text, state.words[i]))
+          content.push(word(text, state.words[i].error))
         }
 
         content.push(raw`&nbsp;`)
@@ -91,10 +84,3 @@ function capitalize (text, capitalized) {
   }).join('')
 }
 
-function word (text, props) {
-  return html`
-    <span class="${wordPrefix} ${props.error ? 'near-white bg-red' : ''}">
-      ${text}
-    </span>
-  `
-}
