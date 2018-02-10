@@ -24,7 +24,8 @@ module.exports = class Editor extends Nanocomponent {
     let marked = false
     const content = []
     for (let i = 0, char = 0, len = state.words.length, text; i < len; i++) {
-      text = state.words[i].text
+      text = state.words[i].text, state.words[i].capitalized
+      text = capitalize(state.words[i].text, state.words[i].capitalized)
 
       if (!text) continue
 
@@ -71,4 +72,14 @@ module.exports = class Editor extends Nanocomponent {
       }
     }
   }
+}
+
+const capitalize = (text, capitalized) => {
+  return text.split('').map((character, index) => {
+    if (capitalized[index]) {
+      return character.toUpperCase()
+    } else {
+      return character
+    }
+  }).join('')
 }

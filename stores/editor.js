@@ -27,7 +27,7 @@ function writer (state, emitter) {
             emitter.emit('spellcheck', i)
             emitter.emit('spellcheck', i + 1)
           } else {
-            state.words.push({ text: '', loading: false, error: null })
+            state.words.push(createWord())
             emitter.emit('spellcheck', i)
           }
           state.index += 1
@@ -46,11 +46,7 @@ function writer (state, emitter) {
     if (!capitalize) letter = letter.toLowerCase()
 
     if (!state.words.length) {
-      state.words.push({
-        text: '',
-        loading: false,
-        error: null,
-        capitalized: [] })
+      state.words.push(createWord())
     }
 
     for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
@@ -119,4 +115,13 @@ function writer (state, emitter) {
     state.index += num
     emitter.emit('render')
   })
+}
+
+const createWord = () => {
+  return {
+    text: '',
+    loading: false,
+    error: null,
+    capitalized: []
+  }
 }
