@@ -21,25 +21,40 @@ module.exports = class Editor extends Nanocomponent {
   }
 
   createElement (state, emit) {
-    let char = 0
+    let marked = false
+    const content = []
+    for (let i = 0, char = 0, len = state.words.length, text; i < len; i++) {
+      text = state.words[i].text
+
+      if (!text) continue
+
+      if (char + text.length === state.index) {
+        marked = true
+        content.push(html`<span>${text}</span>`, marker())
+      } else {
+        if (char + text.length > state.index && !marked) {
+          marked = true
+          const index = state.index - char
+          const parts = [text.substr(0, index), marker(), text.substr(index)]
+          content.push(html`<span>${parts}</span>`)
+        } else {
+          content.push(html`<span>${text}</span>`)
+        }
+
+        content.push(raw`&nbsp;`)
+
+        if (char + text.length + 1 === state.index) {
+          marked = true
+          content.push(marker())
+        }
+      }
+
+      char += text.length + 1
+    }
 
     return html`
       <div onkeydown=${onkeydown} contenteditable="true" class="${prefix} relative ma3 f3 lh-copy sans-serif mw7 w-80 vh-100">
-        ${state.words.length ? state.words.reduce((words, word) => {
-          char += word.text.length + 1
-          const list = []
-
-          if (!word.text) {
-            return words
-          } else if (char - 1 === state.index) {
-            list.push(html`<span>${word.text}</span>`, marker())
-          } else {
-            list.push(html`<span>${word.text}</span>`, raw`&nbsp`)
-            if (char === state.index) list.push(marker())
-          }
-
-          return words.concat(list)
-        }, []) : marker()}
+        ${content.length ? content : marker()}
       </div>
     `
 
@@ -49,8 +64,8 @@ module.exports = class Editor extends Nanocomponent {
       const code = event.keyCode
       if ((code >= 65 && code <= 90) || code === 32) {
         emit('key', event.keyCode, event.shiftKey)
-      } else if (code >= 37 && code <= 40) {
-        emit('move', code)
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        emit('move', event.key === 'ArrowRight' ? 1 : -1)
       } else if (code === 8) {
         emit('delete')
       }

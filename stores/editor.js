@@ -97,7 +97,18 @@ function writer (state, emitter) {
     })
   })
 
-  emitter.on('move', function (key) {
-    console.log(key)
+  emitter.on('move', function (num) {
+    let total = state.words.reduce(function (length, word) {
+      return length + word.text.length + 1
+    }, 0)
+
+    // remove trailing space
+    total -= 1
+
+    // exit of cursor is already at the end
+    if (num > 0 && state.index === total) return
+
+    state.index += num
+    emitter.emit('render')
   })
 }
