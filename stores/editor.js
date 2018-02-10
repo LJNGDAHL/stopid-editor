@@ -18,12 +18,20 @@ function writer (state, emitter) {
     const { code, capitalize } = character
 
     if (code === 32) {
-      for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
-        word = state.words[i].text
-        if (char + word.length >= state.index) {
-          if (char + word.length > state.index) {
-            state.words.splice(i, 0, word.substr(state.index - char))
-            state.words[i] = word.substr(0, state.index - char)
+      for (let i = 0, len = state.words.length, char = 0, text; i < len; i++) {
+        text = state.words[i].text
+        if (char + text.length >= state.index) {
+          if (char + text.length > state.index) {
+            const capitalized = state.words[i].capitalized
+            state.words.splice(i, 0, Object.assign({}, state.words[i], {
+              text: text.substr(state.index - char),
+              capitalized: capitalized.slice(state.index - char)
+            }))
+            state.words[i].text = text.substr(0, state.index - char)
+            state.words[i].capitalized = capitalized.slice(
+              state.index - char,
+              capitalized.length
+            )
             emitter.emit('spellcheck', i)
             emitter.emit('spellcheck', i + 1)
           } else {
@@ -34,34 +42,32 @@ function writer (state, emitter) {
           emitter.emit('render')
           return
         }
-        char += (word.length + 1)
+        char += (text.length + 1)
       }
     }
 
     let key = state.keys[code]
     if (!key) key = state.keys[code] = code
-
-    let letter = String.fromCharCode(key).toLowerCase()
-    if (capitalize)
-    if (!capitalize) letter = letter.toLowerCase()
+    const letter = String.fromCharCode(key).toLowerCase()
 
     if (!state.words.length) {
       state.words.push(createWord())
     }
 
-    for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
-      word = state.words[i]
-      if (char + word.text.length >= state.index) {
-        if (char + word.text.length > state.index) {
-          word.text = word.text.slice(0, state.index) + letter + word.text.slice(state.index)
+    for (let i = 0, len = state.words.length, char = 0, text; i < len; i++) {
+      text = state.words[i].text
+      if (state.index >= char && char + text.length >= state.index) {
+        if (char + text.length > state.index) {
+          const index = state.index - char
+          state.words[i].text = text.slice(0, index) + letter + text.slice(index)
         } else {
-          word.text += letter
-          word.capitalized.push(capitalize)
+          state.words[i].capitalized.push(capitalize)
+          state.words[i].text += letter
         }
         state.index += 1
         emitter.emit('render')
       }
-      char += (word.text.length + 1)
+      char += (text.length + 1)
     }
   })
 
