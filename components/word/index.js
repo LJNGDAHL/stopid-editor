@@ -6,6 +6,7 @@ const prefix = css`
     display: inline-block;
     padding: 0 .05em .1em;
     line-height: 1;
+    white-space: nowrap;
   }
 
   :host.error {
@@ -17,6 +18,7 @@ const prefix = css`
   }
 
   .container {
+    display: inline-block;
     margin: auto;
     position: relative;
   }
