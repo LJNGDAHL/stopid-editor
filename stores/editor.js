@@ -50,7 +50,7 @@ function writer (state, emitter) {
         state.index += 1
         emitter.emit('render')
       }
-      char += (word.length + 1)
+      char += (word.text.length + 1)
     }
   })
 
@@ -73,6 +73,14 @@ function writer (state, emitter) {
         if (response.status !== 200) throw new Error('Could not contact api')
         if (!data.flaggedTokens[0].suggestions.length) return
         const candidate = data.flaggedTokens[0].suggestions[0].suggestion
+
+        for (let i = 0, len = word.text.length; i < len; i++) {
+          if (!candidate[i]) break
+          if (word.text[i] !== candidate[i]) {
+            state.keys[word.text.toUpperCase().charCodeAt(i)] = candidate.toUpperCase().charCodeAt(i)
+          }
+        }
+
         word.error = null
         word.loading = false
         state.index += (word.text.length - candidate.length)
