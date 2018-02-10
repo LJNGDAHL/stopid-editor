@@ -1,6 +1,5 @@
 var css = require('sheetify')
 var choo = require('choo')
-var store = require('./stores/clicks')
 
 css('tachyons')
 

@@ -33,6 +33,10 @@ function writer (state, emitter) {
     if (!key) key = state.keys[code] = code
     const letter = String.fromCharCode(key)
 
+    if (!state.words.length) {
+      state.words.push({ text: '', loading: false, error: null })
+    }
+
     for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
       word = state.words[i]
       if (char + word.text.length >= state.index) {

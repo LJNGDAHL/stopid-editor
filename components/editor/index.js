@@ -1,4 +1,5 @@
 const html = require('choo/html')
+const raw = require('choo/html/raw')
 const Nanocomponent = require('nanocomponent')
 const css = require('sheetify')
 
@@ -7,7 +8,6 @@ const prefix = css`
     outline: none;
   }
 `
-
 
 module.exports = class Editor extends Nanocomponent {
   load (el) {
@@ -19,8 +19,17 @@ module.exports = class Editor extends Nanocomponent {
   }
 
   createElement (state, emit) {
-  return html`
-      <div contenteditable="true" class="${prefix} ma3 f3 lh-copy sans-serif mw7 w-80 vh-100"></div>
+    return html`
+      <div onkeydown=${onkeydown} contenteditable="true" class="${prefix} ma3 f3 lh-copy sans-serif mw7 w-80 vh-100">
+        ${state.words.reduce((words, word) => {
+          return words.concat(html`<span>${word.text}</span>`, raw`&nbsp`)
+        }, [])}
+      </div>
     `
+
+    function onkeydown (event) {
+      emit('key', event.keyCode)
+      event.preventDefault()
+    }
   }
 }
