@@ -42,7 +42,7 @@ const prefix = css`
   }
 
   .left-frills {
-    right: 164px;
+    right: 100px;
     top: 28.5px;
   }
 
@@ -63,7 +63,7 @@ const prefix = css`
   }
 
   .right-frills {
-    left: 164px;
+    left: 100px;
     top: 28.5px;
   }
   .active .right-frills {
@@ -90,18 +90,6 @@ const prefix = css`
     transform: rotate(-34deg);
   }
 
-  @-webkit-keyframes move-left {
-    0% {
-      transform: none;
-    }
-    65% {
-      transform: translateX(-80px);
-    }
-    100% {
-      transform: translateX(-80px);
-    }
-  }
-
   @keyframes move-left {
     0% {
       transform: none;
@@ -109,6 +97,7 @@ const prefix = css`
     65% {
       transform: translateX(-80px);
     }
+
     100% {
       transform: translateX(-80px);
     }
