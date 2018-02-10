@@ -28,8 +28,12 @@ module.exports = class Editor extends Nanocomponent {
     `
 
     function onkeydown (event) {
-      emit('key', event.keyCode)
       event.preventDefault()
+
+      const code = event.keyCode
+      if ((code >= 65 && code <= 90) || code === 32) {
+        emit('key', event.keyCode, event.shiftKey)
+      }
     }
   }
 }

@@ -7,7 +7,7 @@ function writer (state, emitter) {
   state.words = []
   state.keys = {}
 
-  emitter.on('key', function (code) {
+  emitter.on('key', function (code, capitalize) {
     if (code === 32) {
       for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
         word = state.words[i].text
@@ -31,7 +31,9 @@ function writer (state, emitter) {
 
     let key = state.keys[code]
     if (!key) key = state.keys[code] = code
-    const letter = String.fromCharCode(key)
+
+    let letter = String.fromCharCode(key)
+    if (!capitalize) letter = letter.toLowerCase()
 
     if (!state.words.length) {
       state.words.push({ text: '', loading: false, error: null })
