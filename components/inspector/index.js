@@ -25,6 +25,7 @@ const button = css`
     bottom: 20px;
     outline: none;
     background: #dcdcdc;
+    z-index: 10;
   }
 
   :host svg {
@@ -44,6 +45,7 @@ const keyboard = css`
     animation: keyboard-appear 325ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
     will-change: transform;
     text-align: center;
+    background-color: #fff;
   }
 
   @keyframes keyboard-appear {
