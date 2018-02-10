@@ -4,10 +4,18 @@ const Nanocomponent = require('nanocomponent')
 const css = require('sheetify')
 const marker = require('../marker')
 
-const prefix = css`
+const editorPrefix = css`
   :host:focus {
     caret-color: transparent;
     outline: none;
+  }
+`
+
+const wordPrefix = css`
+  :host {
+    display: inline-block;
+    padding: 0 .05em .1em;
+    line-height: 1;
   }
 `
 
@@ -30,15 +38,15 @@ module.exports = class Editor extends Nanocomponent {
 
       if (char + text.length === state.index) {
         marked = true
-        content.push(html`<span>${text}</span>`, marker())
+        content.push(word(text, state.words[i]), marker())
       } else {
         if (char + text.length > state.index && !marked) {
           marked = true
           const index = state.index - char
           const parts = [text.substr(0, index), marker(), text.substr(index)]
-          content.push(html`<span>${parts}</span>`)
+          content.push(word(parts, state.words[i]))
         } else {
-          content.push(html`<span>${text}</span>`)
+          content.push(word(text, state.words[i]))
         }
 
         content.push(raw`&nbsp;`)
@@ -53,7 +61,7 @@ module.exports = class Editor extends Nanocomponent {
     }
 
     return html`
-      <div onkeydown=${onkeydown} contenteditable="true" class="${prefix} relative ma3 f3 lh-copy sans-serif mw7 w-80 vh-100">
+      <div onkeydown=${onkeydown} contenteditable="true" class="${editorPrefix} relative mh3 mv5 f2 lh-copy sans-serif mw7 w-80 vh-100">
         ${content.length ? content : marker()}
       </div>
     `
@@ -73,7 +81,7 @@ module.exports = class Editor extends Nanocomponent {
   }
 }
 
-const capitalize = (text, capitalized) => {
+function capitalize (text, capitalized) {
   return text.split('').map((character, index) => {
     if (capitalized[index]) {
       return character.toUpperCase()
@@ -81,4 +89,12 @@ const capitalize = (text, capitalized) => {
       return character
     }
   }).join('')
+}
+
+function word (text, props) {
+  return html`
+    <span class="${wordPrefix} ${props.error ? 'near-white bg-red' : ''}">
+      ${text}
+    </span>
+  `
 }

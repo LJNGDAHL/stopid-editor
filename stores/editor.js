@@ -81,11 +81,16 @@ function writer (state, emitter) {
       method: 'POST',
       body: word.text
     }).then(function (response) {
-      return response.json().then(function (data) {
+      return response.json().then(function (result) {
         if (response.status !== 200) throw new Error('Could not contact api')
-        const candidate = data.find((word) => /^[a-z]+$/i.test(word))
+        if (result.status === 'ok') return
 
-        if (!candidate) return
+        const candidate = result.suggestions.find((word) => /^[a-z]+$/i.test(word))
+
+        if (!candidate) {
+          word.error = result.status
+          return emitter.emit('render')
+        }
 
         for (let i = 0, len = word.text.length; i < len; i++) {
           if (!candidate[i]) break

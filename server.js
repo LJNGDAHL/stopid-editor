@@ -14,10 +14,11 @@ const server = http.createServer(function (req, res) {
 
     req.on('end', function () {
       try {
-        let response = []
+        const response = {status: 'ok', suggestions: []}
         const word = text.toString()
         if (SpellChecker.isMisspelled(word)) {
-          response = SpellChecker.getCorrectionsForMisspelling(text.toString())
+          response.status = 'misspelled'
+          response.suggestions = SpellChecker.getCorrectionsForMisspelling(text.toString())
         }
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
