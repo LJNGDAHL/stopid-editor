@@ -7,7 +7,6 @@ const prefix = css`
     content: "";
     display: inline-block;
     height: 2rem;
-    left: -0.4rem;
     position: relative;
     top: 0.4rem;
     width: 0.2rem;

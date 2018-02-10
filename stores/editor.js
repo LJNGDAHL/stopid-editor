@@ -5,7 +5,7 @@ function writer (state, emitter) {
   state.words = []
   state.keys = {}
 
-  emitter.on('delete', function() {
+  emitter.on('delete', function () {
     const word = state.words[state.words.length - 1]
     word.text = word.text.slice(0, -1)
     console.log(word.text.length)
@@ -86,7 +86,7 @@ function writer (state, emitter) {
 
         word.error = null
         word.loading = false
-        state.index += (word.text.length - candidate.length)
+        state.index += (candidate.length - word.text.length)
         word.text = candidate
         emitter.emit('render')
       })
@@ -97,7 +97,7 @@ function writer (state, emitter) {
     })
   })
 
-  emitter.on('move', function(key) {
+  emitter.on('move', function (key) {
     console.log(key)
   })
 }
