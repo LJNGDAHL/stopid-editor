@@ -34,15 +34,15 @@ module.exports = class Editor extends Nanocomponent {
 
       if (char + text.length === state.index) {
         marked = true
-        content.push(word(text, state.words[i].error), marker())
+        content.push(word(text, state.words[i]), marker())
       } else {
         if (char + text.length > state.index && !marked) {
           marked = true
           const index = state.index - char
           const parts = [text.substr(0, index), marker(), text.substr(index)]
-          content.push(word(parts, state.words[i].error))
+          content.push(word(parts, state.words[i]))
         } else {
-          content.push(word(text, state.words[i].error))
+          content.push(word(text, state.words[i]))
         }
 
         content.push(raw`&nbsp;`)

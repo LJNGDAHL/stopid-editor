@@ -148,12 +148,12 @@ const prefix = css`
 
 module.exports = word
 
-function word (text, error) {
-  console.log(error)
+function word (text, props) {
+  const { corrected, error } = props
   return html`
-    <span class="container ${error ? 'active' : ''}">
+    <span class="container ${corrected ? 'active' : ''}">
       <div class="left-frills frills"></div>
-        <span class="${prefix} ${error ? 'near-white error' : ''}">
+        <span class="${prefix} ${error ? 'white error' : ''}">
           ${text}
         </span>
       <div class="right-frills frills"></div>

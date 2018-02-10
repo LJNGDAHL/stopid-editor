@@ -8,7 +8,6 @@ function writer (state, emitter) {
   emitter.on('delete', function () {
     const word = state.words[state.words.length - 1]
     word.text = word.text.slice(0, -1)
-    console.log(word.text.length)
     state.index -= 1
 
     emitter.emit('render')
@@ -103,6 +102,7 @@ function writer (state, emitter) {
         word.loading = false
         state.index += (candidate.length - word.text.length)
         word.text = candidate
+        word.corrected = true
         emitter.emit('render')
       })
     }).catch(function (err) {
@@ -133,6 +133,7 @@ const createWord = () => {
     text: '',
     loading: false,
     error: null,
-    capitalized: []
+    capitalized: [],
+    corrected: false
   }
 }
