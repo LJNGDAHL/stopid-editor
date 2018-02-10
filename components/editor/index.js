@@ -27,17 +27,17 @@ module.exports = class Editor extends Nanocomponent {
     return html`
       <div onkeydown=${onkeydown} contenteditable="true" class="${prefix} relative ma3 f3 lh-copy sans-serif mw7 w-80 vh-100">
         ${state.words.reduce((words, word) => {
-          char += word.text.length + 1
+          char += word.text.length
+          const list = []
 
-          if ((char - 1) === state.index) {
-            return html`
-              <div>
-                ${words.concat(html`<span>${word.text}</span>`, raw`&nbsp`)}
-                ${marker()}
-              </div>
-            `
+          if (char === state.index) {
+            list.push(html`<span>${word.text}</span>`, marker())
+          } else {
+            list.push(html`<span>${word.text}</span>`, raw`&nbsp`)
+            if (char + 1 === state.index) list.push(marker())
           }
-          return null
+
+          return words.concat(list)
         }, [])}
       </div>
     `

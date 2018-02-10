@@ -4,21 +4,17 @@ function writer (state, emitter) {
   state.index = 0
   state.words = []
   state.keys = {}
-  state.marker = {
-    position: 0
-  }
 
   emitter.on('delete', function() {
     const word = state.words[state.words.length - 1]
     word.text = word.text.slice(0, -1)
+    console.log(word.text.length)
     state.index -= 1
-    console.log(state.index, word.text)
+
     emitter.emit('render')
   })
 
   emitter.on('key', function (code, capitalize) {
-    state.marker.position += 1
-
     if (code === 32) {
       for (let i = 0, len = state.words.length, char = 0, word; i < len; i++) {
         word = state.words[i].text
@@ -54,7 +50,7 @@ function writer (state, emitter) {
       word = state.words[i]
       if (char + word.text.length >= state.index) {
         if (char + word.text.length > state.index) {
-          word.text = word.slice(0, state.index) + letter + word.slice(state.index)
+          word.text = word.text.slice(0, state.index) + letter + word.text.slice(state.index)
         } else {
           word.text += letter
         }
@@ -100,6 +96,7 @@ function writer (state, emitter) {
       emitter.emit('render')
     })
   })
+
   emitter.on('move', function(key) {
     console.log(key)
   })
