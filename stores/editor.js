@@ -1,15 +1,29 @@
-module.exports = writer
+module.exports = editor
 
-function writer (state, emitter) {
+function editor (state, emitter) {
   state.index = 0
   state.words = []
   state.keys = {}
 
   emitter.on('delete', function () {
-    const word = state.words[state.words.length - 1]
-    word.text = word.text.slice(0, -1)
-    state.index -= 1
-
+    for (let i = 0, char = 0, len = state.words.length, word; i < len; i++) {
+      word = state.words[i]
+      if (!word) {
+        continue
+      } else if (!word.text) {
+        state.words.splice(i, 1)
+        state.index -= 1
+      } else if (state.index > char && char + word.text.length > state.index) {
+        const chars = word.text.split('')
+        chars.splice(state.index - char - 1, 1)
+        word.text = chars.join('')
+        state.index -= 1
+      } else if (state.index === char + word.text.length) {
+        word.text = word.text.slice(0, -1)
+        state.index -= 1
+      }
+      char += word.text.length + 1
+    }
     emitter.emit('render')
   })
 
