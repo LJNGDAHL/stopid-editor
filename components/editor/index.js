@@ -15,6 +15,9 @@ const editorPrefix = css`
 module.exports = class Editor extends Nanocomponent {
   load (el) {
     el.focus()
+    window.addEventListener('click', function () {
+      el.focus()
+    })
   }
 
   update () {
