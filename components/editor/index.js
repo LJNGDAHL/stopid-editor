@@ -67,7 +67,7 @@ module.exports = class Editor extends Nanocomponent {
 
       const code = event.keyCode
       if ((code >= 65 && code <= 90) || code === 32) {
-        emit('key', { code: event.keyCode, capitalize: event.shiftKey })
+        emit('char', { code: event.keyCode, capitalize: event.shiftKey })
       } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         emit('move', event.key === 'ArrowRight' ? 1 : -1)
       } else if (code === 8) {

@@ -17,9 +17,11 @@ function editor (state, emitter) {
         const chars = word.text.split('')
         chars.splice(state.index - char - 1, 1)
         word.text = chars.join('')
+        word.capitalized.splice(state.index - char - 1, 1)
         state.index -= 1
       } else if (state.index === char + word.text.length) {
         word.text = word.text.slice(0, -1)
+        word.capitalized.pop()
         state.index -= 1
       }
       char += word.text.length + 1
@@ -27,7 +29,7 @@ function editor (state, emitter) {
     emitter.emit('render')
   })
 
-  emitter.on('key', function (character) {
+  emitter.on('char', function (character) {
     const { code, capitalize } = character
 
     if (code === 32) {
