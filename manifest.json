@@ -1,13 +1,13 @@
 {
-  "name": "stoopid",
-  "short_name": "stoopid",
+  "name": "Stopid Editor",
+  "short_name": "Stopid",
   "description": "",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000",
-  "theme_color": "#000",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [{
-    "src": "/assets/icon.png",
+    "src": "/assets/android-chrome-512x512.png",
     "type": "image/png",
     "sizes": "512x512"
   }]
