@@ -2,27 +2,12 @@ const html = require('choo/html')
 const raw = require('choo/html/raw')
 const Nanocomponent = require('nanocomponent')
 const css = require('sheetify')
+const marker = require('../marker')
 
 const prefix = css`
   :host:focus {
     caret-color: transparent;
     outline: none;
-  }
-
-  :host .Marker {
-    animation: blink 1400ms steps(5, start) infinite;
-    content: "";
-    display: inline-block;
-    height: 2rem;
-    position: relative;
-    top: 0.4rem;
-    width: 0.2rem;
-  }
-
-  @keyframes blink {
-    to {
-      visibility: hidden;
-    }
   }
 `
 
@@ -44,9 +29,16 @@ module.exports = class Editor extends Nanocomponent {
         ${state.words.reduce((words, word) => {
           char += word.text.length + 1
 
-          return words.concat(html`<span>${word.text}</span>`, raw`&nbsp`)
+          if ((char - 1) === state.index) {
+            return html`
+              <div>
+                ${words.concat(html`<span>${word.text}</span>`, raw`&nbsp`)}
+                ${marker()}
+              </div>
+            `
+          }
+          return null
         }, [])}
-        <div class="Marker bg-dark-red"></div>
       </div>
     `
 
@@ -56,6 +48,10 @@ module.exports = class Editor extends Nanocomponent {
       const code = event.keyCode
       if ((code >= 65 && code <= 90) || code === 32) {
         emit('key', event.keyCode, event.shiftKey)
+      } else if (code >= 37 && code <= 40) {
+        emit('move', code)
+      } else if (code === 8) {
+        emit('delete')
       }
     }
   }
