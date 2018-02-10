@@ -1,6 +1,6 @@
 module.exports = writer
 
-const ENDPOINT = 'https://api.cognitive.microsoft.com/bing/v7.0/writer?mkt=en-US&mode=proof'
+const ENDPOINT = 'https://api.cognitive.microsoft.com/bing/v7.0/spellcheck?mkt=en-US&mode=proof'
 
 function writer (state, emitter) {
   state.index = 0
@@ -15,11 +15,11 @@ function writer (state, emitter) {
           if (char + word.length > state.index) {
             state.words.splice(i, 0, word.substr(state.index - char))
             state.words[i] = word.substr(0, state.index - char)
-            emitter.emit('spell-check', i)
-            emitter.emit('spell-check', i + 1)
+            emitter.emit('spellcheck', i)
+            emitter.emit('spellcheck', i + 1)
           } else {
             state.words.push({ text: '', loading: false, error: null })
-            emitter.emit('spell-check', i)
+            emitter.emit('spellcheck', i)
           }
           state.index += 1
           emitter.emit('render')
@@ -52,7 +52,7 @@ function writer (state, emitter) {
     }
   })
 
-  emitter.on('spell-check', function (index) {
+  emitter.on('spellcheck', function (index) {
     const word = state.words[index]
 
     word.loading = true
@@ -60,7 +60,7 @@ function writer (state, emitter) {
 
     window.fetch(ENDPOINT, {
       method: 'POST',
-      body: word.text,
+      body: `text=${word.text}`,
       headers: {
         'Content-Length': word.text.length,
         'Content-Type': 'application/x-www-form-urlencoded',
