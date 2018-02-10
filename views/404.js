@@ -1,6 +1,6 @@
 var html = require('choo/html')
 
-var TITLE = 'stoopid - route not found'
+var TITLE = 'Stopid Editor - route not found'
 
 module.exports = view
 
