@@ -57,7 +57,7 @@ module.exports = class Editor extends Nanocomponent {
     }
 
     return html`
-      <div onkeydown=${onkeydown} contenteditable="true" class="${editorPrefix} relative mh3 mb5 f2 lh-copy sans-serif mw7 w-80 flex-auto">
+      <div onkeydown=${onkeydown} spellcheck="false" contenteditable="true" class="${editorPrefix} relative mh3 mb5 f2 lh-copy sans-serif mw7 w-80 flex-auto">
         ${content.length ? content : marker()}
       </div>
     `
