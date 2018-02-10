@@ -73,7 +73,7 @@ function writer (state, emitter) {
     }).then(function (response) {
       return response.json().then(function (data) {
         if (response.status !== 200) throw new Error('Could not contact api')
-        const candidate = data[0]
+        const candidate = data.find((word) => /^[a-z]+$/i.test(word))
 
         if (!candidate) return
 
