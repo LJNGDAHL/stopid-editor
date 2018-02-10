@@ -1,7 +1,5 @@
 module.exports = writer
 
-const ENDPOINT = 'https://api.cognitive.microsoft.com/bing/v7.0/spellcheck?mkt=en-US&mode=proof'
-
 function writer (state, emitter) {
   state.index = 0
   state.words = []
@@ -60,19 +58,15 @@ function writer (state, emitter) {
     word.loading = true
     emitter.emit('render')
 
-    window.fetch(ENDPOINT, {
+    window.fetch('/spellcheck', {
       method: 'POST',
-      body: `text=${word.text}`,
-      headers: {
-        'Content-Length': word.text.length,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Ocp-Apim-Subscription-Key': '766e3573dcda43ec9c3057ac8d894948'
-      }
+      body: word.text
     }).then(function (response) {
       return response.json().then(function (data) {
         if (response.status !== 200) throw new Error('Could not contact api')
-        if (!data.flaggedTokens[0].suggestions.length) return
-        const candidate = data.flaggedTokens[0].suggestions[0].suggestion
+        const candidate = data[0]
+
+        if (!candidate) return
 
         for (let i = 0, len = word.text.length; i < len; i++) {
           if (!candidate[i]) break

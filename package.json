@@ -6,7 +6,7 @@
     "build": "bankai build index.js",
     "create": "choo-scaffold",
     "inspect": "bankai inspect index.js",
-    "start": "bankai start index.js",
+    "start": "node server.js",
     "test": "standard && npm run test-deps",
     "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
@@ -15,6 +15,7 @@
     "choo-service-worker": "^2.4.0",
     "nanocomponent": "^6.5.0",
     "sheetify": "^6.2.0",
+    "spellchecker": "^3.4.4",
     "tachyons": "^4.9.1"
   },
   "devDependencies": {
