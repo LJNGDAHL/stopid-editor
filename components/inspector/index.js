@@ -36,6 +36,9 @@ const button = css`
 
 const keyboard = css`
   :host {
+    background-color: rgba(255, 255, 255, 0.975);
+    border-radius: 2px;
+    padding: 1rem;
     position: absolute;
     left: 50%;
     bottom: 0;
@@ -45,13 +48,19 @@ const keyboard = css`
     animation: keyboard-appear 325ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
     will-change: transform;
     text-align: center;
-    background-color: #fff;
+    white-space: nowrap;
   }
 
   @keyframes keyboard-appear {
     to {
       opacity: 1;
-      transform: translate(-50%, -25%);
+      transform: translate(-50%, -15%);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    :host {
+      bottom: 50px;
     }
   }
 
